@@ -7,6 +7,7 @@
     <groupId>com.techstudio</groupId>
     <artifactId>spring-lite</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -14,6 +15,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <junit.version>4.13</junit.version>
+        <slf4j.version>1.7.29</slf4j.version>
+        <logback.version>1.2.3</logback.version>
     </properties>
 
     <dependencies>
@@ -23,6 +26,21 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

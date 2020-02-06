@@ -1,5 +1,7 @@
 package com.techstudio.springlite.util;
 
+import java.lang.reflect.Array;
+
 /**
  * @author lj
  * @date 2020/2/3
@@ -40,6 +42,15 @@ public class ClassUtils {
             }
         }
         return cl;
+    }
+
+    public static Class<?> forName(String name, ClassLoader classLoader) throws ClassNotFoundException {
+        Assert.notNull(name, "Name must not be null");
+        ClassLoader clToUse = classLoader;
+        if (clToUse == null) {
+            clToUse = getDefaultClassLoader();
+        }
+        return Class.forName(name, false, clToUse);
     }
 
 }

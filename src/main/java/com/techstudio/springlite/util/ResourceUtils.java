@@ -49,7 +49,7 @@ public class ResourceUtils {
      * @throws FileNotFoundException FileNotFoundException
      */
     public static URL getUrl(String resourceLocation) throws FileNotFoundException {
-        Assert.notnull(resourceLocation, "Resource location must not be null");
+        Assert.notNull(resourceLocation, "Resource location must not be null");
         if (resourceLocation.startsWith(CLASSPATH_URL_PREFIX)) {
             return getClassPathUrl(resourceLocation);
         }
@@ -72,7 +72,7 @@ public class ResourceUtils {
      * @throws FileNotFoundException FileNotFoundException
      */
     public static File getFile(String resourceLocation) throws FileNotFoundException {
-        Assert.notnull(resourceLocation, "Resource location must not be null");
+        Assert.notNull(resourceLocation, "Resource location must not be null");
         if (resourceLocation.startsWith(CLASSPATH_URL_PREFIX)) {
             // classpath下的文件
             return getFile(getClassPathUrl(resourceLocation));
@@ -94,7 +94,7 @@ public class ResourceUtils {
      * @throws FileNotFoundException FileNotFoundException
      */
     public static File getFile(URL resourceUrl) throws FileNotFoundException {
-        Assert.notnull(resourceUrl, "Resource URL must not be null");
+        Assert.notNull(resourceUrl, "Resource URL must not be null");
         if (!URL_PROTOCOL_FILE.equals(resourceUrl.getProtocol())) {
             throw new FileNotFoundException("Resource protocol does not found in file system: " + resourceUrl);
         }
@@ -121,7 +121,7 @@ public class ResourceUtils {
      * @throws FileNotFoundException FileNotFoundException
      */
     public static URL getClassPathUrl(String resourceLocation) throws FileNotFoundException {
-        Assert.notnull(resourceLocation, "Resource location must not be null");
+        Assert.notNull(resourceLocation, "Resource location must not be null");
         if (!resourceLocation.startsWith(CLASSPATH_URL_PREFIX)) {
             throw new IllegalArgumentException("resourceLocation must be start with " + CLASSPATH_URL_PREFIX);
         }

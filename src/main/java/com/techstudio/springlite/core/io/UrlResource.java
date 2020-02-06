@@ -1,5 +1,8 @@
 package com.techstudio.springlite.core.io;
 
+import com.techstudio.springlite.util.ResourceUtils;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -10,7 +13,7 @@ import java.net.URLConnection;
  * @author lj
  * @date 2020/2/3
  */
-public class UrlResource implements Resource {
+public class UrlResource extends AbstractResource {
 
     private final URL url;
 
@@ -30,5 +33,15 @@ public class UrlResource implements Resource {
             }
             throw e;
         }
+    }
+
+    @Override
+    public URL getURL() throws IOException {
+        return url;
+    }
+
+    @Override
+    public File getFile() throws IOException {
+        return ResourceUtils.getFile(url);
     }
 }
