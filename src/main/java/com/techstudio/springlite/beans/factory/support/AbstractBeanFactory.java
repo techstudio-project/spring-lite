@@ -3,6 +3,7 @@ package com.techstudio.springlite.beans.factory.support;
 import com.techstudio.springlite.beans.BeansException;
 import com.techstudio.springlite.beans.factory.BeanCreationException;
 import com.techstudio.springlite.beans.factory.BeanFactory;
+import com.techstudio.springlite.beans.factory.CannotLoadBeanClassException;
 import com.techstudio.springlite.beans.factory.NoSuchBeanDefinitionException;
 import com.techstudio.springlite.beans.factory.config.BeanDefinition;
 import com.techstudio.springlite.util.ClassUtils;
@@ -138,6 +139,14 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     protected void markBeanAsCreated(String beanName) {
         //todo
+    }
+
+    protected Class<?> resolveBeanClass(BeanDefinition mbd, String beanName)
+            throws CannotLoadBeanClassException {
+        if (mbd.getBeanClass() != null) {
+            return mbd.getBeanClass();
+        }
+        throw new CannotLoadBeanClassException("class is null");
     }
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;

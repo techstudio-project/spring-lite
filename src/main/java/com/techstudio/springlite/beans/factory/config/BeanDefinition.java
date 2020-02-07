@@ -22,7 +22,6 @@ public interface BeanDefinition {
         return !getConstructorArgumentValues().isEmpty();
     }
 
-
     MutablePropertyValues getPropertyValues();
 
     default boolean isSingleton() {

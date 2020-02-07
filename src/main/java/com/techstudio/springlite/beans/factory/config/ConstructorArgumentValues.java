@@ -31,6 +31,10 @@ public class ConstructorArgumentValues {
         this.genericArgumentValues.clear();
     }
 
+    public List<ValueHolder> getGenericArgumentValues() {
+        return genericArgumentValues;
+    }
+
     public static class ValueHolder {
 
         private Object value;
