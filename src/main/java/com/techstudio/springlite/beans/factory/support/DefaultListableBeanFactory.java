@@ -2,43 +2,58 @@ package com.techstudio.springlite.beans.factory.support;
 
 import com.techstudio.springlite.beans.BeansException;
 import com.techstudio.springlite.beans.factory.BeanDefinitionStoreException;
+import com.techstudio.springlite.beans.factory.BeanFactory;
 import com.techstudio.springlite.beans.factory.ListableBeanFactory;
 import com.techstudio.springlite.beans.factory.NoSuchBeanDefinitionException;
 import com.techstudio.springlite.beans.factory.config.BeanDefinition;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author lj
  * @date 2020/2/5
  */
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
-        implements ListableBeanFactory,BeanDefinitionRegistry {
+        implements ListableBeanFactory, BeanDefinitionRegistry {
+
+    private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
+
+    public DefaultListableBeanFactory() {
+    }
+
+    public DefaultListableBeanFactory(BeanFactory parentBeanFactory) {
+        super(parentBeanFactory);
+    }
 
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) throws BeanDefinitionStoreException {
-
+        beanDefinitionMap.putIfAbsent(beanName, beanDefinition);
     }
 
     @Override
     public void removeBeanDefinition(String beanName) throws NoSuchBeanDefinitionException {
-
+        beanDefinitionMap.remove(beanName);
     }
 
     @Override
     public BeanDefinition getBeanDefinition(String beanName) throws NoSuchBeanDefinitionException {
-        return null;
+        BeanDefinition bd = beanDefinitionMap.get(beanName);
+        if (bd == null) {
+            throw new NoSuchBeanDefinitionException("no bean definition");
+        }
+        return bd;
     }
 
     @Override
     public boolean containsBeanDefinition(String beanName) {
-        return false;
+        return beanDefinitionMap.containsKey(beanName);
     }
 
     @Override
     public int getBeanDefinitionCount() {
-        return 0;
+        return beanDefinitionMap.size();
     }
 
     @Override
@@ -86,5 +101,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     @Override
     public <T> T getBean(Class<T> requiredType, Object... args) throws BeansException {
         return null;
+    }
+
+    @Override
+    public void preInstantiateSingletons() throws BeansException {
+        for (Map.Entry<String, BeanDefinition> entry : beanDefinitionMap.entrySet()) {
+            getBean(entry.getKey());
+        }
     }
 }

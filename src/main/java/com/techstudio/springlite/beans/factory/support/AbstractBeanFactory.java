@@ -36,22 +36,22 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
     @Override
     public Object getBean(String beanName, Object... args) throws BeansException {
-        return doGetBean(beanName,null,args,false);
+        return doGetBean(beanName, null, args, false);
     }
 
     @Override
     public <T> T getBean(String beanName, Class<T> requiredType) throws BeansException {
-        return doGetBean(beanName,requiredType,null,false);
+        return doGetBean(beanName, requiredType, null, false);
     }
 
     @Override
     public boolean containsBean(String beanName) {
-        return false;
+        return containsSingleton(beanName);
     }
 
     @Override
     public Class<?> getType(String beanName) throws NoSuchBeanDefinitionException {
-        return null;
+        return getBean(beanName).getClass();
     }
 
     @SuppressWarnings("unchecked")

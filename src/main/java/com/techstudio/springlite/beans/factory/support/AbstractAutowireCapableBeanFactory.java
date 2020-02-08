@@ -1,15 +1,18 @@
 package com.techstudio.springlite.beans.factory.support;
 
 import com.techstudio.springlite.beans.BeanInstantiationException;
+import com.techstudio.springlite.beans.MutablePropertyValues;
+import com.techstudio.springlite.beans.PropertyValue;
 import com.techstudio.springlite.beans.factory.BeanCreationException;
+import com.techstudio.springlite.beans.factory.BeanFactory;
 import com.techstudio.springlite.beans.factory.config.*;
 import com.techstudio.springlite.util.BeanUtils;
-import com.techstudio.springlite.util.ClassUtils;
-import com.techstudio.springlite.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
@@ -20,6 +23,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         implements AutowireCapableBeanFactory {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractAutowireCapableBeanFactory.class);
+
+    public AbstractAutowireCapableBeanFactory() {
+    }
+
+    public AbstractAutowireCapableBeanFactory(BeanFactory parentBeanFactory) {
+        super(parentBeanFactory);
+    }
 
     @Override
     protected Object createBean(String beanName, BeanDefinition mbd, Object[] args)
@@ -41,7 +51,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object doCreateBean(String beanName, BeanDefinition bd, Object[] args)
             throws BeanCreationException {
         try {
-            // 创建示例
+            // 创建实例
             Object bean = createBeanInstance(beanName, bd, args);
             // 依赖注入
             populateBean(beanName, bd, bean);
@@ -54,8 +64,22 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
     }
 
-    private void populateBean(String beanName, BeanDefinition bd, Object bean) {
+    private void populateBean(String beanName, BeanDefinition bd, Object bean)
+            throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
 
+        MutablePropertyValues mpvs = bd.getPropertyValues();
+        List<PropertyValue> pvs = mpvs.getPropertyValueList();
+        for (PropertyValue pv : pvs) {
+            if (pv.getValue() instanceof RuntimeBeanReference) {
+                RuntimeBeanReference reference = (RuntimeBeanReference) pv.getValue();
+                String methodName = "set" + reference.getBeanName().substring(0, 1).toUpperCase()
+                        + reference.getBeanName().substring(1);
+                Object refVal = getBean(reference.getBeanName());
+                Method method = bean.getClass().getDeclaredMethod(methodName, refVal.getClass());
+                method.setAccessible(true);
+                method.invoke(method, refVal);
+            }
+        }
     }
 
     protected Object createBeanInstance(String beanName, BeanDefinition bd, Object[] args) throws NoSuchMethodException {
@@ -100,7 +124,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     protected Object initializeBean(final String beanName, final Object bean, BeanDefinition bd) {
-        return null;
+        return bean;
     }
 
 }
