@@ -41,7 +41,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
     }
 
     protected void finishBeanFactoryInitialization(DefaultListableBeanFactory beanFactory){
-
+        beanFactory.preInstantiateSingletons();
     }
 
     @Override

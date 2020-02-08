@@ -6,6 +6,7 @@ import com.techstudio.springlite.beans.factory.xml.XmlBeanDefinitionReader;
 import com.techstudio.springlite.context.ApplicationContext;
 import com.techstudio.springlite.core.io.DefaultResourceLoader;
 import com.techstudio.springlite.core.io.Resource;
+import com.techstudio.springlite.util.ClassUtils;
 
 import java.io.IOException;
 
@@ -22,16 +23,12 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableA
         super(parent);
     }
 
-    /**
-     *
-     * @param beanFactory
-     * @throws BeansException
-     * @throws IOException
-     */
+
     protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory)
             throws BeansException {
         XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
         beanDefinitionReader.setResourceLoader(new DefaultResourceLoader());
+        beanDefinitionReader.setBeanClassLoader(ClassUtils.getDefaultClassLoader());
         String[] configLocations = getConfigLocations();
         if (configLocations != null) {
             beanDefinitionReader.loadBeanDefinitions(configLocations);

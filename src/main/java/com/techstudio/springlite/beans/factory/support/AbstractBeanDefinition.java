@@ -37,11 +37,6 @@ public class AbstractBeanDefinition implements BeanDefinition {
     }
 
     @Override
-    public boolean hasConstructorArgumentValues() {
-        return getConstructorArgumentValues().isEmpty();
-    }
-
-    @Override
     public MutablePropertyValues getPropertyValues() {
         if (this.propertyValues == null) {
             this.propertyValues = new MutablePropertyValues();
