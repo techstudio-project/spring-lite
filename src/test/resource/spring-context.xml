@@ -8,7 +8,11 @@
        http://www.springframework.org/schema/context/spring-context.xsd"
        default-autowire="byType">
 
+    <bean id="testBean2" class="com.techstudio.springlite.TestBean2">
+        <property name="testBean1" ref="testBean1"/>
+        <constructor-arg name="testBean11" ref="testBean1"/>
+    </bean>
+
     <bean id="testBean1" class="com.techstudio.springlite.TestBean1"/>
 
-    <bean id="testBean2" class="com.techstudio.springlite.TestBean2"/>
 </beans>

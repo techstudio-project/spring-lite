@@ -77,7 +77,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 Object refVal = getBean(reference.getBeanName());
                 Method method = bean.getClass().getDeclaredMethod(methodName, refVal.getClass());
                 method.setAccessible(true);
-                method.invoke(method, refVal);
+                method.invoke(bean, refVal);
             }
         }
     }
@@ -105,7 +105,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object autowireConstructor(String beanName, BeanDefinition bd)
             throws NoSuchMethodException {
 
-        Constructor<?> constructor = bd.getBeanClass().getDeclaredConstructor();
         ConstructorArgumentValues argValues = bd.getConstructorArgumentValues();
         List<ConstructorArgumentValues.ValueHolder> valueHolders = argValues.getGenericArgumentValues();
 
@@ -119,6 +118,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Object[] args = valueHolders.stream()
                 .map(ConstructorArgumentValues.ValueHolder::getValue)
                 .toArray();
+
+        Class<?>[] parameterTypes = new Class<?>[args.length];
+        for (int i = 0; i < args.length; i++) {
+            parameterTypes[i] = args[i].getClass();
+        }
+
+        Constructor<?> constructor = bd.getBeanClass().getDeclaredConstructor(parameterTypes);
 
         return BeanUtils.instantiateClass(constructor, args);
     }
