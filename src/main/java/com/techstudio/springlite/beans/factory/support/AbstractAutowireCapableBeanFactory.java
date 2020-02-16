@@ -130,6 +130,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return BeanUtils.instantiateClass(constructor, args);
     }
 
+    /**
+     * aop 从这里下刀
+     *
+     * @param beanName
+     * @param bean
+     * @param bd
+     * @return
+     */
     protected Object initializeBean(final String beanName, final Object bean, BeanDefinition bd) {
         return bean;
     }
