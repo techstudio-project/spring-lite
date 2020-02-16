@@ -55,7 +55,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             Object bean = createBeanInstance(beanName, bd, args);
             // 依赖注入
             populateBean(beanName, bd, bean);
-            // 执行一些spring初始化的钩子函数
+            // 执行一些spring初始化的钩子函数比如InitializingBean的afterPropertiesSet()
+            // BeanPostProcessor的postProcessBeforeInitialization 、postProcessAfterInitialization
             bean = initializeBean(beanName, bean, bd);
             return bean;
         }
