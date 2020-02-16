@@ -93,7 +93,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
             if (instance == null) {
                 continue;
             }
-            if (type.isInstance(instance)) {
+            if (type.isInstance(instance) || type.isAssignableFrom(instance.getClass())) {
                 beans.add(beanName);
             }
         }
